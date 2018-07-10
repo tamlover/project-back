@@ -1,26 +1,38 @@
 package com.advan.newproject.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-public class Device extends IdEntity {
+@Table
+public class Device {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String deviceName;
-
-    @JoinTable(name="USER_DEVICE",//中间表的名称
-            joinColumns={@JoinColumn(name="USER_ID",referencedColumnName="id")},//中间表PRODUCT_ID字段关联PRODUCT的ID
-            inverseJoinColumns={@JoinColumn(name="DEVICE_ID",referencedColumnName="id")})//中间表CATEGORY_ID字段关联CATEGORY的ID
-    @ManyToMany
-    private List<WebAPPUser> users=new ArrayList<WebAPPUser>();
-
-
     private String deviceNumber;
     private String deviceDetail;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @ManyToMany(mappedBy = "devices")
+    private Set<UserInfo> UserInfos;
+
+    public Set<UserInfo> getUserInfos() {
+        return UserInfos;
+    }
+
+    public void setUserInfos(Set<UserInfo> userInfos) {
+        UserInfos = userInfos;
+    }
 
     public String getDeviceName() {
         return deviceName;
@@ -46,11 +58,4 @@ public class Device extends IdEntity {
         this.deviceDetail = deviceDetail;
     }
 
-    public List<WebAPPUser> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<WebAPPUser> users) {
-        this.users = users;
-    }
 }
